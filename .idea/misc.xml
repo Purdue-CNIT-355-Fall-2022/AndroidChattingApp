@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/CLASS/spring 2022/CNIT 325/AndroidChattingApp/app/src/main/res/layout/activity_add_new_chat.xml" value="0.17603850050658562" />
+        <entry key="..\:/CLASS/spring 2022/CNIT 325/AndroidChattingApp/app/src/main/res/layout/activity_chat_list.xml" value="0.25" />
+        <entry key="..\:/CLASS/spring 2022/CNIT 325/AndroidChattingApp/app/src/main/res/layout/activity_login.xml" value="0.33" />
+      </map>
+    </option>
+  </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
+</project>
