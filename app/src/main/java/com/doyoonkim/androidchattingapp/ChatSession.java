@@ -67,6 +67,8 @@ public class ChatSession {
         } catch (InterruptedException e) {
             //DO NOTHING
         }
+        temp.interrupt();
+        temp = null;
     }
 
     public User connectToServer(String userName) {
@@ -98,7 +100,8 @@ public class ChatSession {
             // DO NOTHING;
         }
 
-
+        temp.interrupt();
+        temp = null;
         return sessionUser;
     }
 
@@ -131,6 +134,9 @@ public class ChatSession {
         } catch (InterruptedException e) {
             // DO NOTHING;
         }
+
+        temp.interrupt();
+        temp = null;
         return user;
     }
 
@@ -160,6 +166,9 @@ public class ChatSession {
         } catch (InterruptedException e) {
             // DO NOTHING;
         }
+
+        temp.interrupt();
+        temp = null;
     }
 
     public ArrayList<ChatRoom> getChatRoomByUser() {
@@ -190,6 +199,9 @@ public class ChatSession {
         } catch (InterruptedException e) {
             // DO NOTHING;
         }
+
+        temp.interrupt();
+        temp = null;
         return chatRooms;
     }
 
@@ -223,6 +235,8 @@ public class ChatSession {
             } catch (InterruptedException e) {
                 // DO NOTHING;
             }
+            temp.interrupt();
+            temp = null;
         }
 
         return chats;
@@ -267,6 +281,8 @@ public class ChatSession {
             } catch (InterruptedException e) {
                 // DO NOTHING;
             }
+            temp.interrupt();
+            temp = null;
         }
 
     }

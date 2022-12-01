@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -61,5 +62,7 @@ class ChatRoomViewHolder extends RecyclerView.ViewHolder {
                 listener.onClick(data);
             }
         });
+        TextView chatRoomTitle = itemView.findViewById(R.id.chatRoomNameTextView);
+        chatRoomTitle.setText(data.getChatroomName());
     }
 }

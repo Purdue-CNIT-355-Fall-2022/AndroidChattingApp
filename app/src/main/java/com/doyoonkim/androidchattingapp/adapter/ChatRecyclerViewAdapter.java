@@ -1,5 +1,6 @@
 package com.doyoonkim.androidchattingapp.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,8 +26,12 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder
     }
 
     public void notifyChanges(ArrayList<Chat> dataset) {
-        this.dataset = dataset;
-        notifyDataSetChanged();
+        Log.d("Same?", "" + this.dataset.containsAll(dataset));
+        if (!(this.dataset.containsAll(dataset))) {
+            this.dataset = dataset;
+            notifyDataSetChanged();
+            Log.d("ChatRecyclerViewAdapter", "Notified.");
+        }
     }
 
 

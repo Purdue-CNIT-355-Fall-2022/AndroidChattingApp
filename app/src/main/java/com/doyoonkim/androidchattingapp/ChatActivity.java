@@ -3,6 +3,7 @@ package com.doyoonkim.androidchattingapp;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -28,6 +29,7 @@ public class ChatActivity extends AppCompatActivity {
     private ChatRecyclerViewAdapter adapter;
 
     private ChatSession session;
+    private Thread dataThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,13 +53,20 @@ public class ChatActivity extends AppCompatActivity {
 
         backBtn.setOnClickListener((view) -> {
             session.setCurrentChatRoom(null);
-            finish();
+            startActivity(new Intent(this, ChatListActivity.class));
         });
 
         sendBtn.setOnClickListener((view) -> {
             String msg = msgEditText.getText().toString();
             if (!msg.equals("")) {
-                session.addChat(msg);
+                if (dataThread != null) {
+                    try {
+                        dataThread.sleep(100);
+                        session.addChat(msg);
+                    } catch (InterruptedException e) {
+                        Log.d("Thread", e.getMessage());
+                    }
+                }
             }
         });
 
@@ -67,15 +76,29 @@ public class ChatActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        Thread temp = new Thread(() -> {
-            while (session.getCurrentChatRoom() != null) {
-                ArrayList<Chat>  chats = session.getChatByChatRoom();
-                new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                    Log.d("Handler", "Size: " + chats.size());
-                    adapter.notifyChanges(chats);
-                }, 500);
-            }
-        });
-        temp.start();
+        if (dataThread == null) {
+            dataThread = new Thread(() -> {
+                while (session.getCurrentChatRoom() != null) {
+                    ArrayList<Chat>  chats = session.getChatByChatRoom();
+                    new Handler(Looper.getMainLooper()).post(() -> {
+                        Log.d("Handler", "Size: " + chats.size());
+                        adapter.notifyChanges(chats);
+                    });
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        // DO NOTHING.
+                    }
+                }
+            });
+            dataThread.start();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        dataThread.interrupt();
+        dataThread = null;
     }
 }
