@@ -7,20 +7,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.doyoonkim.androidchattingapp.ChatSession;
 import com.doyoonkim.androidchattingapp.R;
+import com.doyoonkim.androidchattingapp.TransApi;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.function.UnaryOperator;
 
 import data.Chat;
 
 public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder> {
     private ArrayList<Chat> dataset = new ArrayList<Chat>();
-
+    private static final String APP_ID = "20221206001486416";
+    private static final String SECURITY_KEY = "wcH8q9RlUx3N6DaNooeI";
     public ChatRecyclerViewAdapter(ArrayList<Chat> dataset) {
         this.dataset = dataset;
     }
@@ -29,6 +30,15 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder
         Log.d("Same?", "" + this.dataset.containsAll(dataset));
         if (!(this.dataset.containsAll(dataset))) {
             this.dataset = dataset;
+            for (Chat s : dataset){
+                String message = s.getMsg();
+                TransApi api = new TransApi(APP_ID, SECURITY_KEY);
+                String translatedJson = api.getTransResult(message, "auto", "en");
+                Result jsonObject = new Gson().fromJson(translatedJson, Result.class);
+                String translated = jsonObject.getTrans_result().get(0).getDst();
+                System.out.println(translatedJson);
+                s.setMsg(translated);
+            }
             notifyDataSetChanged();
             Log.d("ChatRecyclerViewAdapter", "Notified.");
         }

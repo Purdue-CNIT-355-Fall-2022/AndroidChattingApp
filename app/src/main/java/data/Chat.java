@@ -56,6 +56,10 @@ public class Chat implements Serializable {
         return msg;
     }
 
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
     @Override
     public String toString() {
         return String.format(
