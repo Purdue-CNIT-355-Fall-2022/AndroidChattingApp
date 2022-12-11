@@ -47,7 +47,9 @@ public class ChatActivity extends AppCompatActivity {
         chatTitle.setText(session.getCurrentChatRoom().getChatroomName());
 
         mChatRecyclerView = findViewById(R.id.mChatRecyclerView);
-        adapter = new ChatRecyclerViewAdapter(session.getChatByChatRoom());
+        adapter = new ChatRecyclerViewAdapter();
+        adapter.notifyChanges(session.getChatByChatRoom());
+
         mChatRecyclerView.setAdapter(adapter);
 
 

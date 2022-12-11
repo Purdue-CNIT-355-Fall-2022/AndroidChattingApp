@@ -14,7 +14,9 @@ import com.doyoonkim.androidchattingapp.R;
 import com.doyoonkim.androidchattingapp.TransApi;
 import com.google.gson.Gson;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import data.Chat;
 
@@ -22,23 +24,44 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder
     private ArrayList<Chat> dataset = new ArrayList<Chat>();
     private static final String APP_ID = "20221206001486416";
     private static final String SECURITY_KEY = "wcH8q9RlUx3N6DaNooeI";
-    public ChatRecyclerViewAdapter(ArrayList<Chat> dataset) {
-        this.dataset = dataset;
+    private TransApi api;
+
+    public ChatRecyclerViewAdapter() {
+        this.api = new TransApi(APP_ID, SECURITY_KEY);
     }
+
 
     public void notifyChanges(ArrayList<Chat> dataset) {
         Log.d("Same?", "" + this.dataset.containsAll(dataset));
         if (!(this.dataset.containsAll(dataset))) {
-            this.dataset = dataset;
-            for (Chat s : dataset){
-                String message = s.getMsg();
-                TransApi api = new TransApi(APP_ID, SECURITY_KEY);
-                String translatedJson = api.getTransResult(message, "auto", "en");
-                Result jsonObject = new Gson().fromJson(translatedJson, Result.class);
-                String translated = jsonObject.getTrans_result().get(0).getDst();
-                System.out.println(translatedJson);
-                s.setMsg(translated);
+            Thread t = new Thread(() -> {
+                for (Chat s : dataset){
+                    if(s.getReceiver().equals(ChatSession.instance.getSessionUser())) {
+                        System.out.println("Original Message: " + s.getMsg());
+                        String message = s.getMsg();
+                        String translatedJson = api.getTransResult(message, "auto", "en");
+                        Result jsonObject = new Gson().fromJson(translatedJson, Result.class);
+
+                        try {
+                            String translated = jsonObject.getTrans_result().get(0).getDst();
+                            System.out.println(translatedJson);
+                            System.out.println(translated);
+                            s.setMsg(translated);
+                        } catch (NullPointerException npe) {
+                            Log.d("ChatRecyclerViewAdapter", npe.getMessage());
+                            System.out.println(translatedJson);
+                        }
+                    }
+                }
+                this.dataset = dataset;
+            });
+            t.start();
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                System.out.println(e.getMessage());
             }
+
             notifyDataSetChanged();
             Log.d("ChatRecyclerViewAdapter", "Notified.");
         }
@@ -80,7 +103,9 @@ class ChatViewHolder extends RecyclerView.ViewHolder {
 
         sender.setText(data.getSender().getUserName());
         msg.setText(data.getMsg());
-//        timestamp.setText(data.getSendDate().getTime());
+        timestamp.setText(
+                new SimpleDateFormat("MM.dd.HH.mm").format(new Date(data.getSendDate().getTime()))
+        );
 
         if (data.getSender().equals(session.getSessionUser())) {
             sender.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);

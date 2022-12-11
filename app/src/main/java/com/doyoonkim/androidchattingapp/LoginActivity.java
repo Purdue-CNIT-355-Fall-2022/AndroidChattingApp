@@ -4,21 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import data.User;
-
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.OutputStreamWriter;
-import java.net.Socket;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -46,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
         String userName = userNameEditText.getText().toString();
 
         if (!userName.equals("")) {
-            session.startConnection(Utils.getIPAddress(true););// get IPv4 address
+            session.startConnection(address);// get IPv4 address
 
             if (session.isConnected()) {
                 User sessionUser = ChatSession.getInstance(getApplicationContext()).connectToServer(userName);
