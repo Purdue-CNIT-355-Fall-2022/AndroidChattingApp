@@ -45,8 +45,8 @@ public class LoginActivity extends AppCompatActivity {
         String address = serverAddressEditText.getText().toString();
         String userName = userNameEditText.getText().toString();
 
-        if (!address.equals("") || !userName.equals("")) {
-            session.startConnection(address);
+        if (!userName.equals("")) {
+            session.startConnection(Utils.getIPAddress(true););// get IPv4 address
 
             if (session.isConnected()) {
                 User sessionUser = ChatSession.getInstance(getApplicationContext()).connectToServer(userName);
