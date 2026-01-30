@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.doyoonkim.androidchattingapp.adapter.UserListRecyclerViewAdapter;
@@ -15,6 +16,7 @@ public class AddNewChatActivity extends AppCompatActivity {
     EditText newChatNameEditText;
 
     private RecyclerView mRecyclerView;
+    private Button backBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,20 +25,16 @@ public class AddNewChatActivity extends AppCompatActivity {
 
         mRecyclerView = findViewById(R.id.userListRecyclerView);
         UserListRecyclerViewAdapter adapter = new UserListRecyclerViewAdapter(
-                ChatSession.getInstance(getApplicationContext()).requestAllUser()
+                ChatSession.getInstance(getApplicationContext()).requestAllUser(),
+                getApplicationContext()
         );
         mRecyclerView.setAdapter(adapter);
 
+        backBtn = findViewById(R.id.backBtn);
+        backBtn.setOnClickListener((view) -> {
+            finish();
+        });
 
-    }
 
-    /**
-     * ADD button onClick method
-     * @param view
-     */
-    public void onAdd(View view) {
-        goChatListActivityIntent = new Intent(this, ChatListActivity.class);
-        goChatListActivityIntent.putExtra("newChatName", newChatNameEditText.getText().toString());
-        startActivity(goChatListActivityIntent);
     }
 }

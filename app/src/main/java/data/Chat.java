@@ -56,11 +56,25 @@ public class Chat implements Serializable {
         return msg;
     }
 
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
     @Override
     public String toString() {
         return String.format(
                 "%s,%s,%s,%s,%d,%s",
                 chatRoomId, chatId, sender.getUserName(), receiver.getUserName(), sendDate.getTime(),  msg
         );
+    }
+
+    @Override
+    public boolean equals(Object target) {
+        if (this == target) {
+            return true;
+        } else {
+            Chat temp = (Chat) target;
+            return this.getChatId().equals(temp.chatId);
+        }
     }
 }
